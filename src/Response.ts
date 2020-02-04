@@ -1,5 +1,3 @@
-import Encryptor from "./Encryptor";
-
 export enum ResponseType {
     ERROR = "error",
     SUCCESS = "success"
@@ -9,31 +7,23 @@ export default class Response
 {
 
     private type : ResponseType;
-    private msg : string;
+    private msg : object | string;
 
     constructor(response = "") 
     {
-        if(response.startsWith("{")) {
-            this.json_decode(response);
-        } else if(response.length > 0){
-            if (Encryptor.is_loaded()) {
-                //this.json_decode(Encryptor.decrypt(""; response));
-            } else {
-                throw "Invalid response";
-            }
-        } 
+        this.json_decode(response);
     }
 
     json_decode(data : string) : void 
     {
         try {
             let json = JSON.parse(data);
-            if(typeof json.type === "undefined" || typeof json.msg === "undefined") {
+            if(typeof json.type === "undefined" || typeof json.message === "undefined") {
                 this.type = ResponseType.ERROR;
                 this.msg = "Invalid response";
             } else {
                 this.type = json.type === "success" ? ResponseType.SUCCESS : ResponseType.ERROR;
-                this.msg = json.msg;
+                this.msg = json.message;
             }
 
         } catch(err) {
@@ -42,14 +32,19 @@ export default class Response
         }
     }
 
-    set_type(type : ResponseType) : void 
+    get_type() : ResponseType
     {
-        this.type = type;
+        return this.type;
     }
 
-    set_msg(msg : string) : void 
+    was_success() : boolean
     {
-        this.msg = msg;
+        return this.type === ResponseType.SUCCESS;
+    }
+
+    get_msg() : object | string
+    {
+        return this.msg;
     }
 
 }

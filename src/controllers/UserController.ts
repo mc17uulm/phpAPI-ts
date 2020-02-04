@@ -4,13 +4,11 @@ import Response from "./../Response";
 export default class UserController extends Controller
 {
 
-    constructor(class_name : string = "user") {
-        super(class_name);
-    }
+    protected static class_name : string = "user";
 
-    async update(id : Number, new_object : object) : Promise<Response>
+    static async login(username : string, password : string) : Promise<Response>
     {
-        return await super.update(id, new_object);
+        return await super.execute("login", {username: username, password: password});
     }
 
 }

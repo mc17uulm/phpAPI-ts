@@ -2,24 +2,26 @@ import Channel from "./Channel";
 import Response from "./Response";
 
 export interface Parameters {
-    name : string;
-    value: string | number | boolean;
+    [key: string]: string | number | boolean;
 }
 
 export default class Controller
 {
 
-    private class_name : string;
+    protected static class_name : string = "none";
 
-    constructor(class_name : string = "none") {
-        this.class_name = class_name;
+    static async get(params : Parameters[] | Parameters, values : "*" | string | string[] = "*") : Promise<Response>
+    {
+        return await Channel.send_request({
+            resource: this.class_name,
+            request: "get",
+            parameters: params,
+            values: values
+        });
     }
 
-    async get() {
-
-    }
-
-    async set(new_object : object) {
+    static async set(new_object : object) : Promise<Response>
+    {
         return await Channel.send_request({
             resource: this.class_name,
             request: "set",
@@ -27,7 +29,7 @@ export default class Controller
         });
     }
 
-    async update(id : Number, new_object : object) : Promise<Response>
+    static async update(id : Number, new_object : object) : Promise<Response>
     {
         return await Channel.send_request({
             resource: this.class_name,
@@ -37,7 +39,7 @@ export default class Controller
         });
     }
 
-    async delete(id : Number) 
+    static async delete(id : Number) : Promise<Response> 
     {
         return await Channel.send_request({
             resource: this.class_name,
@@ -46,7 +48,8 @@ export default class Controller
         });
     }
 
-    async execute(function_name : string, params: Parameters[]) {
+    static async execute(function_name : string, params: Parameters) : Promise<Response>
+    {
         return await Channel.send_request({
             resource: this.class_name,
             request: "execute",

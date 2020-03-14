@@ -7,46 +7,7 @@ export interface Parameters {
 
 export default class Controller
 {
-
-    protected static class_name : string = "none";
-
-    static async get(params : Parameters[] | Parameters, values : "*" | string | string[] = "*") : Promise<Response>
-    {
-        return await Channel.send_request({
-            resource: this.class_name,
-            request: "get",
-            parameters: params,
-            values: values
-        });
-    }
-
-    static async set(new_object : object) : Promise<Response>
-    {
-        return await Channel.send_request({
-            resource: this.class_name,
-            request: "set",
-            object: new_object
-        });
-    }
-
-    static async update(id : Number, new_object : object) : Promise<Response>
-    {
-        return await Channel.send_request({
-            resource: this.class_name,
-            request: "update",
-            id: id,
-            object: new_object
-        });
-    }
-
-    static async delete(id : Number) : Promise<Response> 
-    {
-        return await Channel.send_request({
-            resource: this.class_name,
-            request: "delete",
-            id: id
-        });
-    }
+    protected static class_name : string;
 
     static async execute(function_name : string, params: Parameters) : Promise<Response>
     {
